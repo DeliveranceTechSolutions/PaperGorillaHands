@@ -27,30 +27,36 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
     const { data, error } = useQuery({
             queryKey: [`stonks`],
             queryFn: getStocksAggregates,
+            staleTime: 1000 * 60,
+            gcTime: 1000 * 60,
+            refetchInterval: 1000 * 10,
         },
         queryClient
     );
-    console.log(data!);
+    console.log(data?.alphabet);
     console.log(error);
 
     return(
-        <LineChart
-        style={{ width: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
-        responsive
-        data={(data as any)?.results!}
-        margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-        }}
-        >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis domain={[(data as any)?.min! - 10, 'dataMax + 10']} />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" isAnimationActive={isAnimationActive} />
-        </LineChart>
+        <div>
+            <div className="w-full justify-center items-center flex font-bold text-4xl">{data?.alphabet}</div>
+            <LineChart
+            style={{ width: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
+            responsive
+            data={(data as any)?.results!}
+            margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+            }}
+            >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis domain={[(data as any)?.min! - 10, 'dataMax + 10']} />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="uv" stroke="#82ca9d" isAnimationActive={isAnimationActive} />
+            </LineChart>
+        </div>
     )
 };

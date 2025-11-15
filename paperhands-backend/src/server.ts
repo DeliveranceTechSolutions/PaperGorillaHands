@@ -16,43 +16,18 @@ function getRandomDate(startDate: Date, endDate: Date) {
     return { start: new Date(randomTimestamp), end: new Date(randomTimestamp2) };
 }
 
-
-
 function generateAlphabet() {
-    const dictionary = {
-        0: String.fromCharCode(65),
-        1: String.fromCharCode(66),
-        2: String.fromCharCode(67),
-        3: String.fromCharCode(68),
-        4: String.fromCharCode(69),
-        5: String.fromCharCode(70),
-        6: String.fromCharCode(71),
-        7: String.fromCharCode(72),
-        8: String.fromCharCode(73),
-        9: String.fromCharCode(74),
-        10:String.fromCharCode(75),
-        11:String.fromCharCode(76),
-        12:String.fromCharCode(77),
-        13:String.fromCharCode(78),
-        14:String.fromCharCode(79),
-        15:String.fromCharCode(80),
-        16:String.fromCharCode(81),
-        17:String.fromCharCode(82),
-        18:String.fromCharCode(83),
-        19:String.fromCharCode(84),
-        20:String.fromCharCode(85),
-        21:String.fromCharCode(86),
-        22:String.fromCharCode(87),
-        23:String.fromCharCode(88),
-        24:String.fromCharCode(89),
-        25:String.fromCharCode(90),
-    }
-    console.log(dictionary[0])
-    let alphabet = ""
-    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
-    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
-    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
-    return alphabet;
+    const top50Tickers = [
+        "AAPL", "MSFT", "AMZN", "GOOGL", "GOOG", "NVDA", "META", "TSLA",
+        "BRK.B", "JNJ", "V", "UNH", "WMT", "JPM", "MA", "HD", "PG",
+        "DIS", "BAC", "PYPL", "CSCO", "ADBE", "CMCSA", "XOM", "PEP",
+        "KO", "NFLX", "ABBV", "CRM", "INTC", "T", "CVX", "ACN", "NKE",
+        "MRK", "ABT", "ORCL", "SAP", "IBM", "COST", "QCOM", "TXN",
+        "MCD", "NEE", "AMGN", "AMD", "LOW", "LIN", "SBUX", "MMM"
+    ];
+
+    const index = Math.floor(Math.random() * top50Tickers.length)
+    return top50Tickers[index]!;
 }
 
 async function getStocksAggregates() {
@@ -64,6 +39,7 @@ async function getStocksAggregates() {
     const randomDates = getRandomDate(startDate, endDate); 
     const randomAlphabet = generateAlphabet();
     console.log(randomAlphabet);
+    console.log("rando");
     const response = await client.rest.getStocksAggregates(
         randomAlphabet,
         1,
@@ -90,9 +66,9 @@ async function getStocksAggregates() {
         });
     }
 
-    return {results: results, min: min}
+    return {results: results, min: min, alphabet: randomAlphabet}
   } catch (e) {
-    // console.error('An error happened:', e);
+    console.error('An error happened:', e);
   }
 }
 const db: SupabaseClient = supabase;
@@ -118,7 +94,7 @@ app.get('/stonks', async (req: Request, res: Response) => {
         if (error) {
             res.send(error)
         }
-        if (data?.created_at < Number(new Date()) - 60000) {
+        if (data?.created_at < Number(new Date()) - 60000 || data?.selection?.results.length <= 0) {
             const aggs = await getStocksAggregates();
             const schema = {
                 selection: aggs,
@@ -130,12 +106,9 @@ app.get('/stonks', async (req: Request, res: Response) => {
                 .select();
             stonksError ? res.send(stonksError) : res.send(stonks[0]?.selection);
         } else {
-            console.log(data);
-            console.log("here outside");
             res.send(data?.selection);
         }
     } catch (e) {
-        console.log(e);
         res.send(e);
     }
 });
