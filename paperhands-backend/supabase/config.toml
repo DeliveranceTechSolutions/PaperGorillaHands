@@ -1,0 +1,3 @@
+[db.seed]
+enabled = true
+sql_paths = ['./schemas/stonks.sql', './schemas/user.sql']
