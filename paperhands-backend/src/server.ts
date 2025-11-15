@@ -8,17 +8,18 @@ const apiKey = process.env.MASSIVE_API_KEY!;
 
 function getRandomDate(startDate: Date, endDate: Date) {
     const startTimestamp = startDate.getTime();
-    const endTimestamp = endDate.getTime();
+    const endTimestamp = endDate.getTime() - 7884 * 1000000;
     const fixedValue = Math.random();
     const randomTimestamp = startTimestamp + fixedValue * (endTimestamp - startTimestamp);
     const randomTimestamp2 = startTimestamp + (fixedValue + .3) * (endTimestamp - startTimestamp);
+    console.log(randomTimestamp, randomTimestamp2, fixedValue);
   
     return { start: new Date(randomTimestamp), end: new Date(randomTimestamp2) };
 }
 
 function generateAlphabet() {
     const top50Tickers = [
-        "AAPL", "MSFT", "AMZN", "GOOGL", "GOOG", "NVDA", "META", "TSLA",
+        "AAPL", "MSFT", "AMZN", "GOOGL", "GOOG", "NVDA", "META",
         "BRK.B", "JNJ", "V", "UNH", "WMT", "JPM", "MA", "HD", "PG",
         "DIS", "BAC", "PYPL", "CSCO", "ADBE", "CMCSA", "XOM", "PEP",
         "KO", "NFLX", "ABBV", "CRM", "INTC", "T", "CVX", "ACN", "NKE",
@@ -39,7 +40,7 @@ async function getStocksAggregates() {
     const randomDates = getRandomDate(startDate, endDate); 
     const randomAlphabet = generateAlphabet();
     console.log(randomAlphabet);
-    console.log("rando");
+    const revealEndDate = randomDates.end.getTime() + 7884 * 1000000;
     const response = await client.rest.getStocksAggregates(
         randomAlphabet,
         1,
@@ -50,14 +51,25 @@ async function getStocksAggregates() {
         GetStocksAggregatesSortEnum.Asc,
         120
     );
+    const revealResponse = await client.rest.getStocksAggregates(
+        randomAlphabet,
+        1,
+        GetStocksAggregatesTimespanEnum.Day,
+        Math.floor(randomDates.end.getTime() / 1000).toString(),
+        Math.floor(revealEndDate / 1000).toString(),
+        true,
+        GetStocksAggregatesSortEnum.Asc,
+        120
+    );
     let min = Number.MAX_VALUE;
+    let revealMin = Number.MAX_VALUE;
     let results = new Array();
+    let revealResults = new Array();
     for (let i = 0; i < response.resultsCount; i++) {
         const metric = response.results![i]!
         if (metric.l < min) {
             min = metric.l;
         }
-        
         results.push({
             name: `${(new Date(metric.t).getMonth() + 1).toString().padStart(2, '0')}-${new Date(metric.t).getDate().toString().padStart(2, '0')}-${new Date(metric.t).getFullYear()}`,
             uv: metric.h,
@@ -66,7 +78,21 @@ async function getStocksAggregates() {
         });
     }
 
-    return {results: results, min: min, alphabet: randomAlphabet}
+
+    for (let i = 0; i < revealResponse.resultsCount; i++) {
+        const metric = revealResponse.results![i]!
+        if (metric.l < min) {
+            min = metric.l;
+        }
+        revealResults.push({
+            name: `${(new Date(metric.t).getMonth() + 1).toString().padStart(2, '0')}-${new Date(metric.t).getDate().toString().padStart(2, '0')}-${new Date(metric.t).getFullYear()}`,
+            uv: metric.h,
+            pv: metric.l,
+            amt: metric.h
+        }) 
+    }
+
+    return {results: results, min: min, revealResults: revealResults, revealMin: revealMin, alphabet: randomAlphabet}
   } catch (e) {
     console.error('An error happened:', e);
   }
@@ -90,7 +116,6 @@ app.get('/stonks', async (req: Request, res: Response) => {
             .order("created_at", { ascending: false })
             .limit(1)
             .maybeSingle();
-        console.log(data);
         if (error) {
             res.send(error)
         }

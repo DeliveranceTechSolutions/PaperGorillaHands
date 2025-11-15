@@ -29,7 +29,7 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
             queryFn: getStocksAggregates,
             staleTime: 1000 * 60,
             gcTime: 1000 * 60,
-            refetchInterval: 1000 * 10,
+            refetchInterval: 1000 * 20,
         },
         queryClient
     );
