@@ -20,38 +20,38 @@ function getRandomDate(startDate: Date, endDate: Date) {
 
 function generateAlphabet() {
     const dictionary = {
-        0: "A",
-        1: "B",
-        2: "C",
-        3: "D",
-        4: "E",
-        5: "F",
-        6: "G",
-        7: "H",
-        8: "I",
-        9: "J",
-        10: "K",
-        11: "L",
-        12: "M",
-        13: "N",
-        14: "O",
-        15: "P",
-        16: "Q",
-        17: "R",
-        18: "S",
-        19: "T",
-        20: "U",
-        21: "V",
-        22: "W",
-        23: "X",
-        24: "Y",
-        25: "Z",
+        0: String.fromCharCode(65),
+        1: String.fromCharCode(66),
+        2: String.fromCharCode(67),
+        3: String.fromCharCode(68),
+        4: String.fromCharCode(69),
+        5: String.fromCharCode(70),
+        6: String.fromCharCode(71),
+        7: String.fromCharCode(72),
+        8: String.fromCharCode(73),
+        9: String.fromCharCode(74),
+        10:String.fromCharCode(75),
+        11:String.fromCharCode(76),
+        12:String.fromCharCode(77),
+        13:String.fromCharCode(78),
+        14:String.fromCharCode(79),
+        15:String.fromCharCode(80),
+        16:String.fromCharCode(81),
+        17:String.fromCharCode(82),
+        18:String.fromCharCode(83),
+        19:String.fromCharCode(84),
+        20:String.fromCharCode(85),
+        21:String.fromCharCode(86),
+        22:String.fromCharCode(87),
+        23:String.fromCharCode(88),
+        24:String.fromCharCode(89),
+        25:String.fromCharCode(90),
     }
+    console.log(dictionary[0])
     let alphabet = ""
-    for (let i = 0; i < 3; i++) {
-        alphabet += (dictionary as any)[Math.random() * 26]
-    }
-    
+    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
+    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
+    alphabet += String.fromCharCode(Math.random() * (90 - 65) + 65) 
     return alphabet;
 }
 
@@ -63,6 +63,7 @@ async function getStocksAggregates() {
 
     const randomDates = getRandomDate(startDate, endDate); 
     const randomAlphabet = generateAlphabet();
+    console.log(randomAlphabet);
     const response = await client.rest.getStocksAggregates(
         randomAlphabet,
         1,
