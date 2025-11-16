@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'recharts';
+import { useStonkStore } from '../stores/stonkStore';
 
 async function getStocksAggregates () {
     try {
@@ -23,8 +24,16 @@ async function getStocksAggregates () {
 }
 
 export default function PaperHandsLineChart({ isAnimationActive = true }) {
+    const {
+        buy, sell, 
+        min, setMin,
+        stonks, setStonks,
+        revealStonks, setStonksReveal,
+        ticker, setTicker,
+    } = useStonkStore();
+
     const queryClient = useQueryClient();
-    const { data, error } = useQuery({
+    const { data } = useQuery({
             queryKey: [`stonks`],
             queryFn: getStocksAggregates,
             staleTime: 1000 * 60,
@@ -33,16 +42,21 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
         },
         queryClient
     );
-    console.log(data?.alphabet);
-    console.log(error);
 
+    if (data && ticker !== data?.alphabet) {
+        setStonks(data?.results);
+        setStonksReveal(data?.revealResults);
+        setTicker(data?.alphabet);
+        setMin(data?.min);
+    }
+    console.log(revealStonks, buy, sell);
     return(
         <div>
-            <div className="w-full justify-center items-center flex font-bold text-4xl">{data?.alphabet}</div>
+            <div className="w-full justify-center items-center flex font-bold text-4xl">{ticker || "AAAAAA"}</div>
             <LineChart
             style={{ width: '100%', maxHeight: '70vh', aspectRatio: 1.618 }}
             responsive
-            data={(data as any)?.results!}
+            data={buy === 0 && sell === 0 ? stonks : stonks.concat(revealStonks)}
             margin={{
                 top: 5,
                 right: 30,
@@ -52,7 +66,7 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
             >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis domain={[(data as any)?.min! - 10, 'dataMax + 10']} />
+            <YAxis domain={[min - 10 || 0, 'dataMax + 10']} />
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="uv" stroke="#82ca9d" isAnimationActive={isAnimationActive} />
