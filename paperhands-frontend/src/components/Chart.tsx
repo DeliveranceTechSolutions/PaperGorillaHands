@@ -77,7 +77,7 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
             <XAxis dataKey="name" />
             <YAxis domain={['dataMin - 5', 'dataMax + 5']} />
             <Tooltip />
-            <Legend />
+            {/* <Legend /> */}
             <Line type="monotone" dataKey="uv" stroke="#82ca9d" isAnimationActive={isAnimationActive} />
             {   buy !== 0 || sell !== 0 || noBid ?
                 <ReferenceLine 

@@ -1,0 +1,56 @@
+<svg width="200" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050816"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="handGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4B5563"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="bandageGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E5E7EB"/>
+      <stop offset="100%" stop-color="#9CA3AF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" rx="32" fill="url(#bgGrad)"/>
+
+  <!-- Palm -->
+  <path d="M145 200 C145 165 170 140 200 140 C230 140 255 165 255 200 L255 280 C255 310 235 330 200 330 C165 330 145 310 145 280 Z"
+        fill="url(#handGrad)"/>
+
+  <!-- Fingers -->
+  <rect x="135" y="130" width="45" height="85" rx="16" fill="url(#handGrad)"/>
+  <rect x="180" y="120" width="45" height="95" rx="16" fill="url(#handGrad)"/>
+  <rect x="225" y="130" width="45" height="85" rx="16" fill="url(#handGrad)"/>
+
+  <!-- Thumb -->
+  <path d="M140 210 C120 215 110 240 120 260 C130 280 155 285 170 275 L170 255 C155 260 140 252 140 238 Z"
+        fill="url(#handGrad)"/>
+
+  <!-- Bandages (diagonal wraps) -->
+  <g opacity="0.95">
+    <path d="M110 235 L260 175 L270 195 L120 255 Z" fill="url(#bandageGrad)"/>
+    <path d="M120 265 L270 205 L280 225 L130 285 Z" fill="url(#bandageGrad)"/>
+    <path d="M135 295 L260 245 L270 265 L145 315 Z" fill="url(#bandageGrad)"/>
+  </g>
+
+  <!-- Bandage edge lines -->
+  <g stroke="#9CA3AF" stroke-width="2" opacity="0.6">
+    <line x1="115" y1="237" x2="265" y2="177"/>
+    <line x1="125" y1="267" x2="275" y2="207"/>
+    <line x1="140" y1="297" x2="265" y2="247"/>
+  </g>
+
+  <!-- Subtle highlight -->
+  <ellipse cx="205" cy="185" rx="55" ry="20" fill="white" opacity="0.07"/>
+
+  <!-- Small label -->
+  <text x="200" y="60" text-anchor="middle"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="20" fill="#E5E7EB" letter-spacing="3">
+    PGH
+  </text>
+</svg>
