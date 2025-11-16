@@ -10,7 +10,6 @@ async function getStocksAggregates () {
                 "Content-Type": "json/application"
             }
         });
-        console.log(res);
         if (!res.ok) {
             throw new Error(`Response status: ${res.status}`);
         }
@@ -18,7 +17,6 @@ async function getStocksAggregates () {
         const result = await res.json();
         return result;
     } catch (e) {
-        console.log(e);
         return {};
     }
 }
@@ -41,7 +39,7 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
             queryFn: getStocksAggregates,
             staleTime: 1000 * 60,
             gcTime: 1000 * 60,
-            refetchInterval: 1000 * 20,
+            refetchInterval: 1000 * 5,
         },
         queryClient
     );
@@ -57,7 +55,6 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
         setMinReveal(data?.minReveal);
     }
 
-    console.log(revealStonks[0]?.name, revealStonks[0]?.pv, stonks[stonks.length-2]?.name, stonks[stonks.length-2]?.uv, noBid);
     return(
         <div>
             <div className="w-full justify-center items-center flex font-bold text-4xl">{ticker || "AAAAAA"}</div>
@@ -89,7 +86,7 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
                         { x: revealStonks[0]?.name, y: revealStonks[0]?.pv}
                     ]}
                     stroke="red"
-                    strokeWidth={1}
+                    strokeWidth={1} 
                 /> : null
             }
             <Line type="monotone" dataKey="pv" stroke="#777777" isAnimationActive={isAnimationActive} />

@@ -26,7 +26,7 @@ app.get('/stonks', async (req: Request, res: Response) => {
         if (error) {
             res.send(error)
         }
-        if (data?.created_at < Number(new Date()) - 60000 || data?.selection?.results.length <= 0) {
+        if (data?.created_at < Number(new Date()) - 30000 || data?.selection?.results.length <= 0) {
             const aggs = await getStocksAggregates();
             const schema = {
                 selection: aggs,

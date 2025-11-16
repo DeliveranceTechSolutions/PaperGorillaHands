@@ -7,12 +7,12 @@ export default function PaperHandsControlPanel() {
 
     const handleBuyClick = () => {
         setBuy(price);
-        setUserAmount(userAmount - price)
+        setNoBid(true);
     }
 
     const handleSellClick = () => {
         setSell(price);
-        setUserAmount()
+        setNoBid(true);
     }
 
     const handleNoBid = () => {
@@ -38,7 +38,7 @@ export default function PaperHandsControlPanel() {
                     disabled={noBid}
                     onClick={handleBuyClick}
                 >
-                    Buy
+                    Up
                 </button>
                 <button 
                     className={`
@@ -51,9 +51,9 @@ export default function PaperHandsControlPanel() {
                     disabled={noBid}
                     onClick={handleSellClick}
                 >
-                    Sell
+                    Down
                 </button>
-                <button 
+                {/* <button 
                     className={`
                         px-4 py-2 rounded
                         ${noBid
@@ -63,9 +63,9 @@ export default function PaperHandsControlPanel() {
                       `}
                     disabled={noBid}
                     onClick={handleNoBid}    
-                >No Bid</button>
+                >No Bid</button> */}
             </div>
-            <input type="number" 
+            {/* <input type="number" 
                 className={`
                     px-4 py-2 border border-gray-300 rounded-md mt-5
                     ${noBid
@@ -76,7 +76,7 @@ export default function PaperHandsControlPanel() {
                 onChange={(event) => handlePriceInput(event)}
                 placeholder="100"
                 disabled={noBid}
-            />
+            /> */}
         </div>
     )
 };
