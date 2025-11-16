@@ -1,4 +1,4 @@
-# Paperhands
+# PaperGorillaHands
 
 A full-stack stock tracking platform built with **React**, **Express**, and **Supabase**, featuring real-time aggregate data, intelligent caching, and a modern TypeScript codebase.
 
