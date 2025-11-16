@@ -2,15 +2,21 @@ import { useState } from "react";
 import { useStonkStore } from "../stores/stonkStore"
 
 export default function PaperHandsControlPanel() {
-    const { setBuy, setSell } = useStonkStore();
+    const { setBuy, setSell, noBid, setNoBid, setUserAmount, userAmount } = useStonkStore();
     const [price, setPrice] = useState(100);
 
     const handleBuyClick = () => {
         setBuy(price);
+        setUserAmount(userAmount - price)
     }
 
     const handleSellClick = () => {
         setSell(price);
+        setUserAmount()
+    }
+
+    const handleNoBid = () => {
+        setNoBid(true);
     }
 
     const handlePriceInput = (event: any) => {
@@ -21,36 +27,55 @@ export default function PaperHandsControlPanel() {
     return(
         <div className="w-full items-center justify-center mt-5 flex flex-col">
             <div>
-                <button className="
-                        bg-green-600 hover:bg-green-800 text-white 
-                        px-4 py-2 rounded 
-                        transition transform duration-100 
-                        active:scale-95 active:bg-green-900 
-                        cursor-pointer
-                    "
+                <button 
+                    className={`
+                        px-4 py-2 rounded
+                        ${noBid
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                          : 'bg-green-600 hover:bg-green-800 text-white cursor-pointer transition transform duration-100 active:scale-95 active:bg-green-900'
+                        }
+                      `}
+                    disabled={noBid}
                     onClick={handleBuyClick}
                 >
                     Buy
                 </button>
-                <button className="
-                        bg-red-600 hover:bg-red-800 text-white 
-                        px-4 py-2 rounded 
-                        transition transform duration-100 
-                        active:scale-95 active:bg-red-900 
-                        cursor-pointer
-                    "
+                <button 
+                    className={`
+                        px-4 py-2 rounded
+                        ${noBid
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                          : 'bg-red-600 hover:bg-red-800 text-white cursor-pointer transition transform duration-100 active:scale-95 active:bg-red-900'
+                        }
+                      `}
+                    disabled={noBid}
                     onClick={handleSellClick}
                 >
                     Sell
                 </button>
+                <button 
+                    className={`
+                        px-4 py-2 rounded
+                        ${noBid
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                          : 'bg-blue-600 hover:bg-blue-800 text-white cursor-pointer transition transform duration-100 active:scale-95 active:bg-blue-900'
+                        }
+                      `}
+                    disabled={noBid}
+                    onClick={handleNoBid}    
+                >No Bid</button>
             </div>
-            <input type="number" className="
-                    px-4 py-2 border border-gray-300
-                    mt-5
-                    rounded-md
-                    focus:outline-none focus:ring-2 focus:ring-blue-500
-                    focus:border-transparent
-                " onChange={(event) => handlePriceInput(event)}
+            <input type="number" 
+                className={`
+                    px-4 py-2 border border-gray-300 rounded-md mt-5
+                    ${noBid
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                      : 'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                    }
+                  `}
+                onChange={(event) => handlePriceInput(event)}
+                placeholder="100"
+                disabled={noBid}
             />
         </div>
     )

@@ -13,14 +13,20 @@ interface StonkStore {
     min: number;
     setMin: (myMin: number) => void;
 
+    minReveal: number;
+    setMinReveal: (myMin: number) => void;
+
     buy: number;
     setBuy: (price: number) => void;
 
     sell: number;
     setSell: (price: number) => void;
 
+    noBid: boolean,
+    setNoBid: (event: boolean) => void;
+
     userAmount: number;
-    setUserAmount: () => void;
+    setUserAmount: (amount: number) => void;
 }
 
 export const useStonkStore = create<StonkStore>((set) => ({
@@ -36,12 +42,18 @@ export const useStonkStore = create<StonkStore>((set) => ({
     min: Number.MAX_SAFE_INTEGER,
     setMin: (myMin) => set({ min: myMin }),
 
+    minReveal: Number.MAX_SAFE_INTEGER,
+    setMinReveal: (myMinReveal) => set({ min: myMinReveal }),
+
     buy: 0,
     setBuy: (price) => set(({ buy: price })),
 
     sell: 0,
     setSell: (price) => set(({ sell: price })),
 
+    noBid: false,
+    setNoBid: (event) => set(({ noBid: event })),
+
     userAmount: 100,
-    setUserAmount: () => set((state) => ({ userAmount: state.userAmount }))
+    setUserAmount: (amount) => set((state) => ({ userAmount: amount }))
 }));

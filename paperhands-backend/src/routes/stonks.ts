@@ -77,7 +77,6 @@ export default async function getStocksAggregates() {
         results.push({
             name: `${(new Date(metric.t).getMonth() + 1).toString().padStart(2, '0')}-${new Date(metric.t).getDate().toString().padStart(2, '0')}-${new Date(metric.t).getFullYear()}`,
             uv: metric.h,
-            pv: metric.l,
             amt: metric.h
         });
     }
@@ -90,8 +89,7 @@ export default async function getStocksAggregates() {
         }
         revealResults.push({
             name: `${(new Date(metric.t).getMonth() + 1).toString().padStart(2, '0')}-${new Date(metric.t).getDate().toString().padStart(2, '0')}-${new Date(metric.t).getFullYear()}`,
-            uv: metric.h,
-            pv: metric.l,
+            pv: metric.h,
             amt: metric.h
         }) 
     }
