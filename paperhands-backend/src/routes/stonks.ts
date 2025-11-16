@@ -12,7 +12,6 @@ function getRandomDate(startDate: Date, endDate: Date) {
     }
     const randomTimestamp = startTimestamp + fixedValue * (endTimestamp - startTimestamp);
     const randomTimestamp2 = randomTimestamp + 7884 * 1000000;
-    console.log(randomTimestamp, randomTimestamp2, fixedValue);
   
     return { start: new Date(randomTimestamp), end: new Date(randomTimestamp2) };
 }
@@ -40,7 +39,6 @@ export default async function getStocksAggregates() {
 
     const randomDates = getRandomDate(startDate, endDate); 
     const randomAlphabet = generateAlphabet();
-    console.log(randomAlphabet);
 
     // Add back the amount of 3 months
     const revealEndDate = randomDates.end.getTime() + 7884 * 1000000;
