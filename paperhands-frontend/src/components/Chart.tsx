@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ReferenceLine } from 'recharts';
+import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Line, ReferenceLine } from 'recharts';
 import { useStonkStore } from '../stores/stonkStore';
 
 async function getStocksAggregates () {
@@ -17,20 +18,19 @@ async function getStocksAggregates () {
         const result = await res.json();
         return result;
     } catch (e) {
+        console.log(e);
         return {};
     }
 }
 
 export default function PaperHandsLineChart({ isAnimationActive = true }) {
     const {
-        buy, setBuy,
-        sell, setSell,
-        noBid, setNoBid, 
-        min, setMin,
-        minReveal, setMinReveal,
-        stonks, setStonks,
-        revealStonks, setStonksReveal,
-        ticker, setTicker,
+        buy,
+        sell,
+        noBid,
+        stonks,
+        revealStonks,
+        ticker,
     } = useStonkStore();
 
     const queryClient = useQueryClient();
@@ -43,17 +43,22 @@ export default function PaperHandsLineChart({ isAnimationActive = true }) {
         },
         queryClient
     );
+    
+    useEffect(() => {
+        if (!data) return;
+        if (ticker === data.alphabet) return;
 
-    if (data && ticker !== data?.alphabet) {
-        setBuy(0)
-        setSell(0)
-        setNoBid(false);
-        setStonks(data?.results);
-        setStonksReveal(data?.revealResults);
-        setTicker(data?.alphabet);
-        setMin(data?.min);
-        setMinReveal(data?.minReveal);
-    }
+        useStonkStore.setState({
+            buy: 0,
+            sell: 0,
+            noBid: false,
+            stonks: data.results,
+            revealStonks: data.revealResults,
+            ticker: data.alphabet,
+            min: data.min,
+            minReveal: data.minReveal
+        });
+    }, [data, ticker]);
 
     return(
         <div>
